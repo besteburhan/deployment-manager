@@ -1,0 +1,105 @@
+{% extends 'deployment_app/base.html'%}
+{% load static %}
+{% block head %}
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        var note_id= {{ note.id }};
+
+        {# The DeploymentDetailView is trying to open a WebSocket to the URL: #}
+        {# ws://127.0.0.1:8000/ws/deployment_app/deployment_notes/<note_id> #}
+        {# Consumer will accept the connection #}
+        {# Which consumer accepts it is indicated in routing.py #}
+
+        var commentsocket = new WebSocket(
+            'ws://'+ window.location.host +
+            '/ws/deployment_app/deployment_notes/'+note_id+'/');
+
+        commentsocket.onmessage = function (e) {
+          var data = JSON.parse(e.data);
+          document.getElementById("added_comments").innerHTML += "<div class='card border-blue' id='comment_cards' >"+
+                       "<div class='card-header'>" +
+                         "<div class='col-md-9 '><b>" + data['sender'] + "</b></div>" +
+                         "<div class='col-md-3 mb-2 text-muted' style='text-align: right;'>"+ data['created_at'] + "</div>" +
+                        "</div>" +
+                        "<div class='card-body'>" +
+                            " <p id='card_text'>"+ data['comment'] + "</p>" +
+                        " </div>" +
+                        "</div>";
+        };
+
+        commentsocket.onclose = function (e) {
+          console.error("socket closed")
+        };
+
+
+        function comment() {
+            var text_area = document.getElementById("text_area_id");
+            var message = text_area.value;
+            var user_id = {{ user.id }};
+            commentsocket.send(JSON.stringify({'sender_id': user_id ,'note_id': note_id, 'message': message}));
+            text_area.value = "";
+            document.getElementById('form_comment').style.display = "none";
+        }
+
+
+        function load_unload_element(form_id){
+            var form = document.getElementById(form_id);
+            if(form.style.display=="none")
+                form.style.display = "block" ;
+            else
+                form.style.display = "none";
+          }
+
+    </script>
+{% endblock %}
+{% block body_block_for_authenticated_users%}
+
+    <link rel="stylesheet" href="{% static 'css/deployment_detail.css' %}">
+
+        <div class="card border-secondary" >
+            <div class="card-header">
+                <div class="col-md-9 "><b> {{ note.sender.first_name }} {{ note.sender.last_name }} </b></div>
+                <div class="col-md-3 mb-2 text-muted" style="text-align: right;">{{ note.created_at }}</div>
+            </div>
+            <div class="card-body">
+                <p id="card_text">{{ deploy_content }}</p>
+
+            </div>
+            <div class="card-footer bg-transparent " >
+                <a href="{{ note.note_file.url }}" class="card-link">Download the deployment note</a>
+                <a href="{{ note.project_file.url }}" class="card-link">Download the project file</a>
+                <button style="margin-left: 150px; border-radius: 10px;" id="reply_button" onclick="load_unload_element('form_comment');"> Reply </button>
+            </div>
+        </div>
+            {#comment form #}
+        <div class="container-fluid" style="display: none;" id="form_comment"  >
+            <form method="post" enctype="multipart/form-data" name="comment_form">
+                {% csrf_token %}
+                <label for="textarea"></label>
+                <textarea  class="form-control" id="text_area_id" rows="4" required  ></textarea>
+                <input  type="button" id="comment_submit" value="Comment" onclick="comment();"/>
+            </form>
+        </div>
+        <h4 style="margin-left: 25px"> Comments </h4>
+        {% for comment in comments %}
+            {% if comment.deployment_note == note %}
+                <div id="comments">
+                    <div class="card border-blue" id="comment_cards" >
+                        <div class="card-header">
+                            <div class="col-md-9 "><b>{{ comment.sender.first_name }} {{ comment.sender.last_name }}</b></div>
+                            <div class="col-md-3 mb-2 text-muted" style="text-align: right;">{{ comment.created_at }}</div>
+                        </div>
+                      <div class="card-body">
+                        <p id="card_text">{{ comment.comment }}</p>
+                      </div>
+                    </div>
+                    <br>
+                </div>
+
+                {% endif %}
+            {% endfor %}
+        <div class="new_comment_id" id="added_comments">
+        </div>
+
+{%endblock%}

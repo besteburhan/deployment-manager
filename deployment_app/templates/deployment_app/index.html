@@ -1,0 +1,53 @@
+{% extends 'deployment_app/base.html' %}
+{% load static %}
+
+{% block title %}
+      {% if user.is_authenticated %}
+        {{user.first_name|title}} |
+      {%endif%}
+        Deployment Manager
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+{% endblock %}
+
+
+{% block body_block_for_authenticated_users %}
+    <hr>
+    <h2 id="welcome_text">
+        Welcome to your deployment manager, {{ user.first_name | capfirst }}.
+    </h2>
+    <hr>
+
+
+{% endblock %}
+
+{% block body_block_for_unauthenticated_users %}
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'javascript/index_script.js' %}"></script>
+
+    <div class="main_statistics" >
+        <div class="container">
+            <h2 >Some Statistics</h2>
+            <select id="stat-select" >
+                <option > Choose a statistic result </option>
+                <option value="1"> The relationship between the number of users' projects and the number of users' deployments</option>
+                <option value="2">The relationship between the number of users' teams and the number of users' projects</option>
+            </select>
+        </div>
+        <div id="loadingDiv" >
+            <div class="spinner-border text-secondary" role="status">
+             <span class="sr-only" >Loading...</span>
+            </div>
+        </div>
+        <div id="first_stat">
+            <div id="chartContainer" ></div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

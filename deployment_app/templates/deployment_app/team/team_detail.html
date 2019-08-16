@@ -1,0 +1,68 @@
+{% extends 'deployment_app/base.html'%}
+{% block body_block_for_authenticated_users%}
+
+
+    <script>
+        function load_unload_element(id) {
+            if(document.getElementById(id).style.display=="none")
+                document.getElementById(id).style.display = "block" ;
+            else
+                document.getElementById(id).style.display = "none";
+        }
+    </script>
+
+    <div class="container-fluid">
+        <div class ="jumbotron">
+            <h3>Team Members:</h3>
+              {% for member in team_members %}
+                    {{ member }}
+              {% endfor %}
+
+            <h3>Projects:</h3>
+              {% for project in team_projects %}
+                  <a href="{% url 'deployment_app:project_detail'  project_id=project.id%}">{{ project.project_name }}</a>
+                  <br>
+              {% endfor %}
+
+
+        </div>
+
+
+    {% if  team.team_admin_id  == user.id  %}
+
+        Do you want to add new <a onclick="load_unload_element('team_add_form')" style="color:cornflowerblue">member</a>?
+
+        <div id='team_add_form' class="jumbotron" style="display:none;">
+            <h2>Add new team member:</h2>
+            <form  action="{% url 'deployment_app:team_detail' team_id=team.id %}" method="post">
+                  {% csrf_token %}
+                  <label for="email"></label>
+                  <input type="text" name="email" placeholder="Your Friend's Email" required>
+                  <br>
+                  <label for="submit"></label>
+                  <input type="submit" name="member_adding" value="Add" >
+
+            </form>
+        </div>
+
+        <div class="display_form" >
+
+          Would you like to create a new <a  onclick="load_unload_element('project_form');load_unload_element('list_projects')" style="color: cornflowerblue">project</a>?
+
+          <div id='project_form' class="jumbotron" style="display:none;">
+            <h2>Create Project</h2>
+            <form  action="{% url 'deployment_app:team_detail' team_id=team.id  %}" method="post">
+                  {% csrf_token %}
+                     <label for="name"></label>
+                     <input type="text" name="project_name" placeholder="Project Name" required>
+                     <br>
+                     <br>
+                     <label for="submit"></label>
+                     <input type="submit" name="create-project" value="Create" >
+            </form>
+          </div>
+         </div>
+    {% endif %}
+
+</div>
+{% endblock %}

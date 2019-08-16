@@ -1,0 +1,37 @@
+{% extends 'deployment_app/base.html'%}
+{%load static%}
+
+{%block head%}
+
+{% endblock %}
+
+
+{%block body_block_for_authenticated_users%}
+    <h5 style="position: fixed;bottom: 0; right: 0"> Last Login: {{ user.last_login }}</h5>
+    <div class="container">
+
+
+        <br>
+        <a href="{% url 'deployment_app:edit_profile' %}" style="">
+            <button style="border-radius: 10px;color: black;">Edit Profile </button>
+        </a>
+    </div>
+
+    <style>
+    .container {
+          min-width: 50%;
+        }
+    button {
+          width: 185px;
+          height: 35px;
+          margin: 30px 0 8px 0;
+          font-size: 18px;
+          border: 2px solid #4e768d;
+            text-decoration-color: white;
+            background-color: transparent;
+          color: #ffffff;
+          border-radius: 3px;
+        }
+    </style>
+
+{%endblock%}

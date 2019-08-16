@@ -1,0 +1,66 @@
+{% extends 'deployment_app/base.html'%}
+{% load static %}
+{% block head %}
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+{% endblock %}
+{% block body_block_for_authenticated_users%}
+
+    <div class="container-fluid">
+        <h1>{{ project.project_name }}</h1>
+
+        {% if project.is_github_project %}
+
+            {% if is_updated %}
+                You updated {{ project.project_name }} project on Github. Do you want to write <a href="">the deployment note?</a>
+            {% else %}
+                {{ project.project_name }} is your github project and there is no updates on github.
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+    <div class="container-fluid">
+        {% if deployment_notes %}
+            <h4 style=""> Last Deployment Notes </h4>
+                <ol>
+                {% for note in deployment_notes %}
+
+                            <li>
+                                <a href="{% url 'deployment_app:deployment_detail' note_id=note.id %}">
+                                <div class="card border-secondary" style="width: auto;" >
+                                      <div class="card-body">
+                                        <h5 class="card-title"><b>{{ note.sender.first_name }} {{ note.sender.last_name }}</b></h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ note.created_at }}</h6>
+
+                                        <a href="{{ note.note_file.url }}" class="card-link">Download the deployment note</a>
+                                        <a href="{{ note.project_file.url }}" class="card-link">Download the project file</a>
+                                      </div>
+                                    </div>
+                                </a>
+
+                            </li>
+
+                {% endfor %}
+             </ol>
+        {% endif %}
+    </div>
+
+
+
+    <hr>
+        <h4 style="margin-top: 150px"> <em> New Deployment:</em></h4>
+            <div class="container-fluid">
+                <form method="post" enctype="multipart/form-data" name="deployment_form">
+                    {% csrf_token %}
+                    <input type="file" name='file'  id="id_file" >
+                    <label for="textarea"></label>
+                    <textarea class="form-control" name="note_area" rows="6" ></textarea>
+                    <button type="submit" name="deploy" >Upload</button>
+                </form>
+            </div>
+
+
+{%endblock%}

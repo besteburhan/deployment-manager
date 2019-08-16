@@ -1,0 +1,29 @@
+{% extends 'deployment_app/base.html'%}
+{% load static %}
+{% block body_block_for_authenticated_users%}
+    <link rel="stylesheet" href="{% static 'css/teams.css' %}">
+
+            <div class="container " style="height:auto;">
+
+                <div class="item">
+                {% if user_teams %}
+                   {{ user.staff.team_id }}
+                    {% for team in user_teams %}
+                        <a href="team_detail/{{ team.id }}" ><h3 style="color: #ffffff"> {{ team |capfirst }}</h3></a>
+                        <hr>
+                    {% endfor %}
+                    {% else %}
+                    <h5 style="color: #ffffff;">Create a team, now!</h5>
+                 {% endif %}
+                </div>
+
+            </div>
+
+
+    <div class='container'>
+        <a href="{%url 'deployment_app:create_team' %}" style="color: #ffffff"><button id="plus_button"> +</button></a>
+    </div>
+
+
+
+{%endblock%}

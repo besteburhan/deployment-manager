@@ -1,0 +1,27 @@
+{% extends 'deployment_app/base.html' %}
+{% load static %}
+
+{% block body_block_for_authenticated_users %}
+
+
+
+    <div class="container-fluid">
+        <div  class ="jumbotron" >
+          <form  enctype="multipart/form-data" method="post"  id="first_form">
+            {% csrf_token %}
+              Select projects to follow them.
+              <br>
+              {% for key, value in json.items %}
+                  <label for="check"></label>
+                  <input type="checkbox" name={{ value }} >  {{ value | title }}
+                  <br>
+              {% endfor %}
+              <br>
+
+              <input type="submit" name="" value="Select" >
+          </form>
+        </div>
+    </div>
+
+
+{% endblock %}

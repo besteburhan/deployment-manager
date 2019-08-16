@@ -1,0 +1,17 @@
+{% extends 'deployment_app/base.html'%}
+{% load static %}
+{% block body_block_for_authenticated_users%}
+    <link rel="stylesheet" href="{% static 'css/team_creation.css' %}">
+    <div class="container">
+        <div class="item">
+            <div class="flex-form">
+          <form  enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{team_create_form.as_p}}
+              <button type="submit" name="" value="Create" style="color: #ffffff">Create</button>
+          </form>
+        </div>
+    </div>
+
+
+{% endblock %}

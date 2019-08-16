@@ -1,0 +1,25 @@
+{% extends 'deployment_app/base.html' %}
+{% load static %}
+
+{% block body_block_for_authenticated_users %}
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+    {# Edit profile form#}
+      <div class="profile-info">
+        <div class="container">
+          <div id="profile_edit_form"  >
+              <h3 style="text-align: center"> Edit Profile </h3>
+              <div class="item">
+                <form  enctype="multipart/form-data" method="post" style="font-size: small">
+                  {% csrf_token %}
+                      {{ edit_profile_form.as_p }}
+                      <label for="submit"></label>
+                    <button type="submit" name="" value="Save Changes" style="color: #ffffff">Save Changes</button>
+                </form>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+
+{% endblock %}

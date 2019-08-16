@@ -1,0 +1,57 @@
+{% extends 'deployment_app/base.html'%}
+
+{% block body_block_for_authenticated_users%}
+
+      <div class="container text-center" style="height:auto;">
+            <div class="item">
+              <h2 style="color: #ffffff">Projects You Created</h2>
+                <hr>
+                {%if  user_projects %}
+
+                        {%for project in user_projects%}
+                              {% if  project.is_github_project %}
+                              {% endif %}
+
+                              <a href="{{ project.id }}" style="color: black;">
+                                  <h4 style="color: #ffffff"> {{project}} </h4>
+                              </a>
+                              <hr>
+
+                    {%endfor%}
+                    </div>
+                    <br>
+                {%endif%}
+
+      </div>
+
+
+    <style>
+        {##plus_button {#}
+        {#    margin: -20px auto 15px;#}
+        {#    width: 50px;#}
+        {#    height: 50px;#}
+        {#    display: flex;#}
+        {#    font-size: 35px;#}
+        {#    transform: scale(1.5);#}
+        {#    align-items: center;#}
+        {#    justify-content: center;#}
+        {#    color: #eee;#}
+        {#    border-color: white;#}
+        {#     background: linear-gradient(to top, #343A40, #454d55);#}
+        {#     border-radius: 50%;#}
+        {#     box-shadow: 0 0 5px #444;#}
+        {#     transition: all 0.4s ease-in-out;#}
+        {# }#}
+        .item {
+            background: #343A40;
+            box-shadow: -4px 4px 2px 2px #343A40;
+            margin: 30px;
+            padding: 30px 10px 10px 10px;
+        }
+        .container
+    </style>
+
+
+
+
+{%endblock%}

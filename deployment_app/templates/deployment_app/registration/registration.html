@@ -1,0 +1,25 @@
+{% extends 'deployment_app/base.html'%}
+{% load static %}
+{% block head %}
+     <link rel="stylesheet" href="{%static 'css/form.css'%}">
+{% endblock %}
+{%block body_block_for_unauthenticated_users%}
+
+    <div class="container">
+        <div class="item">
+
+           <h4 style="color: #ffffff">Create an account and join us.</h4>
+           <div class="flex-form">
+              <form enctype="multipart/form-data" method="post">
+                 {% csrf_token %}
+                {{staff_form.as_p}}
+                {{staff_additional_info_form.as_p}}
+                  <button type="submit" value="Register" style="color: white">SIGN UP</button>
+              </form>
+           </div>
+              <p class="reg">Already registered? <a href="{%url 'deployment_app:login' %}" style="color: #46687c">Sign In</a></p>
+        </div>
+    </div>
+
+
+{% endblock %}

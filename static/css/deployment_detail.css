@@ -1,0 +1,13 @@
+.card{
+    border-color: #343A40;
+}
+#comment_cards{
+    margin-left: 25px;
+}
+#card_text{
+    width: auto;
+    font-size: 15px;
+    font-family: 'Courgette', cursive;
+    margin-left: 15px;
+    margin-top: 10px;
+}
