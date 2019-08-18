@@ -24,7 +24,7 @@ pip install -r requirements.txt
   + For Ubuntu:
 
     ```bash
-     pip install foobar
+     sudo apt-get install python3.7-dev default-libmysqlclient-dev
     ```  
   + For Windows:
 
